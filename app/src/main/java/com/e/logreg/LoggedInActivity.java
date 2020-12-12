@@ -16,6 +16,7 @@ public class LoggedInActivity extends AppCompatActivity {
 
     Button btn_logout;
     TextView text_Felhnev_full;
+
     DBHelper adatbazis;
 
 
@@ -25,9 +26,23 @@ public class LoggedInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_logged_in);
 
         init();
-
-       listeners();
+        listeners();
+        kiiras();
     }
+
+    private void kiiras() {
+        Cursor adatok = adatbazis.loggedin();
+
+        StringBuilder builder = new StringBuilder();
+        while (adatok.moveToNext()) {
+            builder.append("Üdvözöllek ").append(adatok.getString(0)).append("\n\n");
+
+            text_Felhnev_full.setText(builder.toString());
+            Toast.makeText(this, "Sikeres bejelentkezés", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
    /*/ private void kiiras() {
         Cursor adatok = adatbazis.detaQuery(password);
@@ -50,15 +65,14 @@ public class LoggedInActivity extends AppCompatActivity {
     private void listeners() {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 Intent kilepes = new Intent(LoggedInActivity.this, MainActivity.class);
                 startActivity(kilepes);
                 finish();
             }
         });
-
-
     }
+
 
     private void init() {
         btn_logout = findViewById(R.id.btn_logout);
@@ -67,5 +81,4 @@ public class LoggedInActivity extends AppCompatActivity {
         adatbazis = new DBHelper( LoggedInActivity.this);
 
     }
-
 }

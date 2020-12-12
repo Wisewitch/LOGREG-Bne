@@ -14,25 +14,22 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String COL_ID       = "id";
     public static final String COL_EMAIL    = "enmail";
-    public static final String COL_FELHNEV      = "felhnev";
-
-    public static final String COL_PASS     = "jelszó";
-    public static final String COL_TELJESNEV      = "teljesnev";
+    public static final String COL_FELHNEV   = "felhnev";
+    public static final String COL_PASS     = "jelszo";
+    public static final String COL_TELJESNEV = "teljesnev";
 
     public DBHelper( Context context) {
         super(context, DB_NAME, null, DB_VERSION);
-
 }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "CREATE TABLE IF NOT EXISTS " + FELHASZNALO_TABLE + "(" +
                 COL_ID + "INTEGER PRIMARY KEY AUTOINCREMENT , " +
-                COL_EMAIL + "VARCHAR 255 NOT NULL , " +
-                COL_FELHNEV + "VARCHAR  255 UNIQUE KEY NOT NULL , " +
-
-                COL_PASS + "VARCHAR  255 NOT NULL " +
-                COL_TELJESNEV + "VARCHAR  255 NOT NULL , " + ")";
+                COL_EMAIL + "VARCHAR(255) NOT NULL UNIQUE, " +
+                COL_FELHNEV + "VARCHAR(255) NOT NULL UNIQUE, " +
+                COL_PASS + "VARCHAR(255) NOT NULL " +
+                COL_TELJESNEV + "VARCHAR(255) NOT NULL " + ")";
         db.execSQL(sql);
     }
 
@@ -43,7 +40,7 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean adatrogzites( String email, String felhnev, String jelszo, String teljesnev) {
+    public boolean adatrogzites(String email, String felhnev, String jelszo, String teljesnev) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COL_EMAIL, email);
@@ -53,7 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.insert(FELHASZNALO_TABLE, null, values) != -1;
     }
 
-    public boolean login( String email, String felhnev, String jelszo) {
+   /* public boolean login(String email, String felhnev, String jelszo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COL_EMAIL, email);
@@ -61,20 +58,30 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(COL_PASS, jelszo);
 
         return db.insert(FELHASZNALO_TABLE, null, values) != -1;
-    }
-
-   /* public  Cursor loggedin() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.query(FELHASZNALO_TABLE, new String[]{COL_TELJESNEV}, null, null, null, null, null);
     }*/
 
-    public Cursor kiiras() {
+    public Cursor loggedin() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(FELHASZNALO_TABLE, new String[]{COL_TELJESNEV}, null, null, null, null, null);
+    }
+
+  /*  public Cursor kiiras() {
         SQLiteDatabase db = this.getReadableDatabase();
         // return db.query(FELHASZNALO_TABLE, new String[]{COL_TELJESNEV}, null, null, null, null, null);
 
        return db.rawQuery(" SELECT * FROM felhasznalo WHERE teljesnev = ?", new String[]{} );
 
-    }
+    }*/
 
+
+    public boolean loginCheck(String felhnev, String jelszo) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor result = db.rawQuery("SELECT * FROM " + FELHASZNALO_TABLE +
+                               " WHERE " + COL_FELHNEV + " = ? OR " + COL_EMAIL + " = ? AND " + COL_PASS + " = ?" , new String[]{felhnev, felhnev, jelszo});
+
+        result.moveToFirst();
+        return result.getCount() == 1;
+    }
 
 }

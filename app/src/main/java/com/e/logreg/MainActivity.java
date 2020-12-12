@@ -7,12 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     Button btn_login, btn_reg_main;
-    EditText et_fnev, et_email, et_pass;
+    EditText et_fnev, et_pass;
     DBHelper adatbazis;
 
     @Override
@@ -25,17 +24,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // adatellenőrzés - - ellenőrizni kell, hogy nem üresek a mezők - üres mező  vagy hibás adat toast
-
     // belépés
+
     private void login() {
-        String email = et_email.getText().toString().trim();
         String fnev = et_fnev.getText().toString().trim();
         String jelszo = et_pass.getText().toString().trim();
 
        // nem üres mezők
 
-        if (email.isEmpty() ||fnev.isEmpty() ) {
-            Toast.makeText( this, "Az email vagy a felhasználónéc megadása kötelező!", Toast.LENGTH_SHORT).show();
+        if (fnev.isEmpty()) {
+            Toast.makeText( this, "A felhaszbnálónév megadása kötelező!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -46,21 +44,23 @@ public class MainActivity extends AppCompatActivity {
 
         // sikeres belépés
 
-       if (adatbazis.login(email, fnev, jelszo)) {
-            Toast.makeText( this, "Sikeres belépés!", Toast.LENGTH_SHORT).show();
+        if (!adatbazis.loginCheck(fnev, jelszo)) {
+            Toast.makeText(this, "Hibás felhasználónév vagy password!", Toast.LENGTH_SHORT).show();
+            return;
         }
         else {
-            Toast.makeText( this, "Sikertelen volt a belépés, hiányos vagy hibás adatoks!", Toast.LENGTH_SHORT).show();
+            Intent bejelentkezes = new Intent(MainActivity.this, LoggedInActivity.class);
+            startActivity(bejelentkezes);
+            finish();
         }
-
     }
 
     private void listeners() {
 
-        btn_reg_main.setOnClickListener(new View.OnClickListener() {  // átléép a Registerbe
+        btn_reg_main.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent register = new Intent(MainActivity.this,  RegisterActivity.class);
+            public void onClick(View view) {
+                Intent register = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(register);
                 finish();
             }
@@ -71,9 +71,7 @@ public class MainActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 login(); // belépés, ho ok
-
             }
         });
 
@@ -83,9 +81,8 @@ public class MainActivity extends AppCompatActivity {
         btn_login = findViewById(R.id.btn_login);
         btn_reg_main = findViewById(R.id.btn_reg_main);
         et_fnev = findViewById(R.id.et_fnev);
-        et_email = findViewById(R.id.et_email);
         et_pass = findViewById(R.id.et_pass);
 
-        adatbazis = new DBHelper( MainActivity.this );
+        adatbazis = new DBHelper( MainActivity.this);
    }
 }

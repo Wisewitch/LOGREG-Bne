@@ -4,18 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class RegisterActivity extends AppCompatActivity {
 
-   Button btn_register, btn_reg_vissza;
+    Button btn_register, btn_reg_vissza;
     EditText et_reg_email, et_reg_fnev, et_reg_pass, et_reg_tnev;
-   DBHelper adatbazis;
+
+    DBHelper adatbazis;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,18 +25,12 @@ public class RegisterActivity extends AppCompatActivity {
         init();
         listeners();
     }
-   /* private void ellenorzes() {
-
-        // minden mező ki van-e töltve
-    }
-*/
 
     // regisztrál a beírt adatokkal..
 
     private void adatrogzites() {
         String email = et_reg_email.getText().toString().trim();
         String felhnev  = et_reg_fnev.getText().toString().trim();
-
         String jelszo = et_reg_pass.getText().toString().trim();
         String teljesnev  = et_reg_tnev.getText().toString().trim();
 
@@ -59,12 +53,11 @@ public class RegisterActivity extends AppCompatActivity {
         // sikeres reg toast
 
         if (adatbazis.adatrogzites(email, felhnev, jelszo, teljesnev)) {
-            Toast.makeText( this, "Sikeres rögzítés!", Toast.LENGTH_SHORT).show();
+            Toast.makeText( this, "Sikeres regisztrálás!", Toast.LENGTH_SHORT).show();
         }
         else {
-            Toast.makeText( this, "Sikertelen volt az rögzítés!", Toast.LENGTH_SHORT).show();
+            Toast.makeText( this, "Sikertelen volt az regisztrálás!", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void listeners() {
