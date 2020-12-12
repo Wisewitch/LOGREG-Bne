@@ -25,11 +25,11 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "CREATE TABLE IF NOT EXISTS " + FELHASZNALO_TABLE + "(" +
-                COL_ID + "INTEGER PRIMARY KEY AUTOINCREMENT , " +
-                COL_EMAIL + "VARCHAR(255) NOT NULL UNIQUE, " +
-                COL_FELHNEV + "VARCHAR(255) NOT NULL UNIQUE, " +
-                COL_PASS + "VARCHAR(255) NOT NULL " +
-                COL_TELJESNEV + "VARCHAR(255) NOT NULL " + ")";
+                COL_ID+" INTEGER PRIMARY KEY AUTOINCREMENT , " +
+                COL_EMAIL+" VARCHAR(255) NOT NULL UNIQUE, " +
+                COL_FELHNEV+" VARCHAR(255) NOT NULL UNIQUE, " +
+                COL_PASS+" VARCHAR(255) NOT NULL, " +
+                COL_TELJESNEV+" VARCHAR(255) NOT NULL " + ")";
         db.execSQL(sql);
     }
 
